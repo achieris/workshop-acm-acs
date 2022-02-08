@@ -1,0 +1,11 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  annotations:
+    apps.open-cluster-management.io/reconcile-rate: medium
+  name: rhacm-gitops
+  namespace: rhacm-gitops-ns
+spec:
+  type: Git
+  pathname: 'https://github.com/achieris/gitops-rhacm-argocd.git'
+  insecureSkipVerify: true

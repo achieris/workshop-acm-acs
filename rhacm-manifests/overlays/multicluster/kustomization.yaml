@@ -1,0 +1,28 @@
+bases:
+  - ../../base/
+resources:
+  - placementrule-openshift-gitops.yaml
+  - subscription-openshift-gitops-multicluster.yaml
+nameSuffix: "-multicluster"
+patches:
+- path: channel-openshift-gitops-multicluster.yaml
+  target:
+    group: apps.open-cluster-management.io
+    version: v1
+    kind: Channel
+    name: rhacm-gitops
+    namespace: rhacm-gitops-ns
+- path: application-openshift-gitops-multicluster.yaml
+  target:
+    group: app.k8s.io
+    version: v1beta1
+    kind: Application
+    name: argocd
+    namespace: openshift-gitops
+- path: namespace-channel-ocpgitops-multicluster.yaml
+  target:
+    version: v1
+    kind: Namespace
+    name: rhacm-gitops-ns
+patchesStrategicMerge: 
+- policy-project-compliance.yaml

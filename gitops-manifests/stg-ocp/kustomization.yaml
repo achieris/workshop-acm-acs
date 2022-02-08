@@ -1,0 +1,3 @@
+resources:
+- projects/dev/apps/pricelist/application.yaml
+- projects/dev/appproject.yaml 

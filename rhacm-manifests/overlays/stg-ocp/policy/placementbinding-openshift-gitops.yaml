@@ -1,0 +1,16 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: openshift-gitops-placementbinding
+  namespace: openshift-gitops
+placementRef:
+  name: openshift-gitops-placementrule-stg-ocp
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+  - name: openshift-gitops-installed-stg-ocp
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io
+  - name: project-compliance-stg-ocp
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io

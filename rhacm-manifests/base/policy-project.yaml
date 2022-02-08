@@ -1,0 +1,121 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: project-compliance
+  namespace: openshift-gitops
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+spec:
+  remediationAction: inform
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: project-compliance
+        spec:
+          remediationAction: inform
+          severity: low
+          namespaceSelector:
+            exclude:
+              - kube-*
+              - open*
+              - default
+            include:
+              - "*"
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-same-namespace
+                spec:
+                  ingress:
+                  - from:
+                    - podSelector: {}
+                  podSelector: null
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-openshift-ingress
+                spec:
+                  ingress:
+                  - from:
+                    - namespaceSelector:
+                        matchLabels:
+                          network.openshift.io/policy-group: ingress
+                  podSelector: {}
+                  policyTypes:
+                  - Ingress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-openshift-monitoring
+                spec:
+                  ingress:
+                  - from:
+                    - namespaceSelector:
+                        matchLabels:
+                          network.openshift.io/policy-group: monitoring
+                  podSelector: {}
+                  policyTypes:
+                  - Ingress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ResourceQuota
+                metadata:
+                  name: storage-consumption
+                spec:
+                  hard:
+                    persistentvolumeclaims: "5"
+                    requests.storage: 100Gi
+            - complianceType: musthave
+              objectDefinition:                    
+                apiVersion: v1
+                kind: ResourceQuota
+                metadata:
+                  name: compute-resources
+                spec:
+                  hard:
+                    limits.cpu: "8"
+                    limits.ephemeral-storage: 40Gi
+                    limits.memory: 16Gi
+                    requests.cpu: "4"
+                    requests.ephemeral-storage: 20Gi
+                    requests.memory: 8Gi
+            - complianceType: musthave
+              objectDefinition:                    
+                apiVersion: v1
+                kind: LimitRange
+                metadata:
+                  name: project-limits
+                spec:
+                  limits:
+                  - default:
+                      cpu: "1"
+                      memory: 1Gi
+                    defaultRequest:
+                      cpu: 500m
+                      memory: 500Mi
+                    type: Container
+            - complianceType: musthave
+              objectDefinition:                    
+                apiVersion: v1
+                kind: LimitRange
+                metadata:
+                  name: image-limits
+                spec:
+                  limits:
+                  - max:
+                      openshift.io/image-tags: 5
+                      openshift.io/images: 10
+                    type: openshift.io/ImageStream

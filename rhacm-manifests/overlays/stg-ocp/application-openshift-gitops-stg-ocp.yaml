@@ -1,0 +1,12 @@
+- op: replace
+  path: /metadata/labels
+  value:
+    app: argocd-stg-ocp
+- op: replace
+  path: /spec/selector
+  value:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - argocd-stg-ocp

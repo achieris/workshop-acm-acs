@@ -1,0 +1,29 @@
+bases:
+  - ../../base/
+resources:
+  - policy/placementbinding-openshift-gitops.yaml
+  - policy/policy-openshift-gitops.yaml
+  - placementrule-openshift-gitops.yaml
+  - subscription-openshift-gitops-apps.yaml
+nameSuffix: "-stg-ocp"
+patches:
+- path: channel-openshift-gitops-stg-ocp.yaml
+  target:
+    group: apps.open-cluster-management.io
+    version: v1
+    kind: Channel
+    name: rhacm-gitops
+    namespace: rhacm-gitops-ns
+- path: application-openshift-gitops-stg-ocp.yaml
+  target:
+    group: app.k8s.io
+    version: v1beta1
+    kind: Application
+    name: argocd
+    namespace: openshift-gitops
+- path: namespace-channel-ocpgitops-stg-ocp.yaml
+  target:
+    version: v1
+    kind: Namespace
+    name: rhacm-gitops-ns
+

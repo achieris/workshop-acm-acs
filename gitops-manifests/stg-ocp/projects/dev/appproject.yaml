@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dev
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/part-of: argocd-ocp-lab-charlie
+spec:
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  destinations:
+    - name: in-cluster
+      namespace: '*'
+      server: '*'
+  roles:
+    - groups:
+        - admin
+      name: syncer
+      policies:
+        - 'p, proj:dev:syncer, applications, sync, dev/*, allow'
+  sourceRepos:
+    - '*'
