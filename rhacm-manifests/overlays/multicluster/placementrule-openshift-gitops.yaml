@@ -15,8 +15,5 @@ spec:
     - key: environment
       operator: In
       values:
-      - ocp-lab-mike
-      - ocp-lab-charlie
-  resourceHint:
-    type: clusterName
-    value: local-cluster
+      - lab01
+      - lab02
