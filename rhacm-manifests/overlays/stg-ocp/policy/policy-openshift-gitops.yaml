@@ -71,6 +71,9 @@ spec:
                   name: openshift-gitops
                   namespace: openshift-gitops
                 spec:
+                  server:
+                    route:
+                      enabled: true
                   resourceExclusions: |
                     - apiGroups:
                       - tekton.dev

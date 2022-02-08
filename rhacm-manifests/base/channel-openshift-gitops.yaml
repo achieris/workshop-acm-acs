@@ -7,5 +7,5 @@ metadata:
   namespace: rhacm-gitops-ns
 spec:
   type: Git
-  pathname: 'https://github.com/achieris/gitops-rhacm-argocd.git'
+  pathname: 'https://github.com/achieris/workshop-acm-acs.git'
   insecureSkipVerify: true
