@@ -71,6 +71,11 @@ spec:
                   name: openshift-gitops
                   namespace: openshift-gitops
                 spec:
+                  dex: 
+                    openShiftOAuth: true
+                  rbac:
+                    policy: 'g, system:cluster-admins, role:admin'
+                    scopes: '[groups]'
                   server:
                     route:
                       enabled: true
